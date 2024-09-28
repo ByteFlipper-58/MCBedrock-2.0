@@ -22,7 +22,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.byteflipper.mcbedrock.screens.HomeScreen
 import com.byteflipper.mcbedrock.ui.theme.MCBedrockTheme
 
 class MainActivity : ComponentActivity() {
@@ -41,25 +43,36 @@ fun MainActivityContent() {
     MCBedrockTheme {
         val navController = rememberNavController()
         var toolbarTitle by remember { mutableStateOf("Главный экран") }
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = navBackStackEntry?.destination?.route
+
         Scaffold(
             modifier = Modifier.fillMaxSize(),
+
             topBar = {
                 TopAppBar(
                     title = { Text(toolbarTitle) },
                     actions = {
-                        IconButton(onClick = {
-                            navController.navigate("settings")
-                        }) {
-                            Icon(Icons.Default.Settings, contentDescription = "Настройки")
+                        if (currentRoute != "settings") {
+                            IconButton(onClick = {
+                                navController.navigate("settings")
+                            }) {
+                                Icon(Icons.Default.Settings, contentDescription = "Настройки")
+                            }
                         }
                     }
                 )
             },
+            bottomBar = {
+                if (currentRoute != "settings") {
+                    BottomNavigationBar(navController = navController)
+                }
+            }
         ) { innerPadding ->
             NavigationHost(
                 navController = navController,
                 modifier = Modifier.padding(innerPadding),
-                onTitleChange = { newTitle -> toolbarTitle = newTitle },
+                onTitleChange = { newTitle -> toolbarTitle = newTitle }
             )
         }
     }

@@ -18,7 +18,8 @@ data class NewsEntry(
 @Serializable
 data class Image(
     val title: String,
-    val url: String,
+    val url: String? = null,
+    val drawableResId: Int? = null,
     val dimensions: Dimensions? = null
 )
 

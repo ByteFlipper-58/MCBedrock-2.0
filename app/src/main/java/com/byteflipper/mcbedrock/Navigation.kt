@@ -4,10 +4,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -18,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.byteflipper.mcbedrock.screens.ChangelogesScreen
 import com.byteflipper.mcbedrock.screens.HomeScreen
+import com.byteflipper.mcbedrock.screens.SettingsScreen
 import com.byteflipper.mcbedrock.screens.VideoScreen
 
 sealed class NavigationItem(val route: String, val icon: ImageVector, val label: String) {
@@ -26,24 +29,29 @@ sealed class NavigationItem(val route: String, val icon: ImageVector, val label:
     object Video : NavigationItem("video", Icons.Filled.MoreVert, "Video")
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationHost(
     navController: NavHostController,
     modifier: Modifier,
     onTitleChange: (String) -> Unit
 ) {
-    NavHost(navController, startDestination = NavigationItem.News.route, modifier = modifier) {
+    NavHost(navController, startDestination = NavigationItem.News.route) {
         composable(NavigationItem.News.route) {
             onTitleChange("Домашний экран")
             HomeScreen(modifier = modifier)
         }
         composable(NavigationItem.Changelogs.route) {
-            onTitleChange("О приложении")
+            onTitleChange("Чейнджлог")
             ChangelogesScreen(modifier = modifier)
         }
         composable(NavigationItem.Video.route) {
-            onTitleChange("Настройки")
+            onTitleChange("Видео")
             VideoScreen(modifier = modifier)
+        }
+        composable("settings") {
+            onTitleChange("Настройки")
+            SettingsScreen(modifier = modifier)
         }
     }
 }
