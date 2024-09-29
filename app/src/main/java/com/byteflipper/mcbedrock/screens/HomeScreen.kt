@@ -18,19 +18,25 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.byteflipper.mcbedrock.ChangelogEntry
 import com.byteflipper.mcbedrock.NewsEntry
+import com.byteflipper.mcbedrock.fetchChangelogEntries
 import com.byteflipper.mcbedrock.fetchNewsEntries
 import com.byteflipper.mcbedrock.ui.component.HorizontalCarusel
+import com.byteflipper.mcbedrock.ui.item.ChangelogItem
+import com.byteflipper.mcbedrock.ui.item.NewsItemImage
 import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier, navController: NavHostController) {
     var newsEntries by remember { mutableStateOf<List<NewsEntry>>(emptyList()) }
+    var changelogsEntries by remember { mutableStateOf<List<ChangelogEntry>>(emptyList()) }
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         scope.launch {
             newsEntries = fetchNewsEntries()
+            changelogsEntries = fetchChangelogEntries("bedrockPatchNotes")
         }
     }
 
@@ -40,25 +46,29 @@ fun HomeScreen(modifier: Modifier = Modifier, navController: NavHostController) 
     ) {
 
 
-        HorizontalCarusel(entries = newsEntries, maxItems = 5, navController = navController)
+        HorizontalCarusel(
+            items = newsEntries,
+            itemContent = { entry -> NewsItemImage(entry) },
+            maxItems = 5,
+            navController = navController,
+            navigationRoute = "news"
+        )
 
         HorizontalDivider(
             modifier = Modifier.padding(0.dp, 8.dp, 0.dp, 0.dp)
         )
 
-        HorizontalCarusel(entries = newsEntries, maxItems = 5, navController = navController)
+        HorizontalCarusel(
+            items = changelogsEntries,
+            itemContent = { entry -> ChangelogItem(entry) },
+            maxItems = 5,
+            navController = navController,
+            navigationRoute = "news"
+        )
 
         HorizontalDivider(
             modifier = Modifier.padding(0.dp, 8.dp, 0.dp, 0.dp)
         )
-
-        HorizontalCarusel(entries = newsEntries, maxItems = 5, navController = navController)
-
-        HorizontalDivider(
-            modifier = Modifier.padding(0.dp, 8.dp, 0.dp, 0.dp)
-        )
-
-        HorizontalCarusel(entries = newsEntries, maxItems = 5, navController = navController)
     }
 }
 
