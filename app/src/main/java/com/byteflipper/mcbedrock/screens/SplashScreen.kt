@@ -31,6 +31,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byteflipper.mcbedrock.R
@@ -38,8 +39,7 @@ import com.byteflipper.mcbedrock.ui.theme.MCBedrockTheme
 import kotlinx.coroutines.delay
 
 @Composable
-@Preview(showBackground = true)
-fun SplashScreen(modifier: Modifier = Modifier) {
+fun SplashScreen(onTimeout: () -> Unit) {
     MCBedrockTheme {
         var animState by remember { mutableIntStateOf(0) }
 
@@ -48,6 +48,7 @@ fun SplashScreen(modifier: Modifier = Modifier) {
                 delay(100)
                 animState += 1
                 delay(3000)
+                onTimeout()
             }
         }
 
@@ -195,4 +196,10 @@ fun SplashScreen(modifier: Modifier = Modifier) {
             }
         }
     }
+}
+
+@PreviewLightDark
+@Composable
+fun SplashScreenPreview() {
+    SplashScreen(onTimeout = {})
 }

@@ -20,11 +20,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.byteflipper.mcbedrock.screens.ChangelogesScreen
 import com.byteflipper.mcbedrock.screens.HomeScreen
+import com.byteflipper.mcbedrock.screens.NewsScreen
 import com.byteflipper.mcbedrock.screens.SettingsScreen
 import com.byteflipper.mcbedrock.screens.VideoScreen
 
 sealed class NavigationItem(val route: String, val icon: ImageVector, val label: String) {
-    object News : NavigationItem("news", Icons.Filled.Star, "News")
+    object Home : NavigationItem("home", Icons.Filled.Star, "Home")
     object Changelogs : NavigationItem("changelogs", Icons.Filled.Edit, "Changelogs")
     object Video : NavigationItem("video", Icons.Filled.MoreVert, "Video")
 }
@@ -36,10 +37,10 @@ fun NavigationHost(
     modifier: Modifier,
     onTitleChange: (String) -> Unit
 ) {
-    NavHost(navController, startDestination = NavigationItem.News.route) {
-        composable(NavigationItem.News.route) {
+    NavHost(navController, startDestination = NavigationItem.Home.route) {
+        composable(NavigationItem.Home.route) {
             onTitleChange("Домашний экран")
-            HomeScreen(modifier = modifier)
+            HomeScreen(modifier = modifier, navController)
         }
         composable(NavigationItem.Changelogs.route) {
             onTitleChange("Чейнджлог")
@@ -52,6 +53,10 @@ fun NavigationHost(
         composable("settings") {
             onTitleChange("Настройки")
             SettingsScreen(modifier = modifier)
+        }
+        composable("news") {
+            onTitleChange("Новости")
+            NewsScreen(modifier = modifier, navController)
         }
     }
 }
@@ -84,7 +89,7 @@ fun NavigationHost(
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(
-        NavigationItem.News,
+        NavigationItem.Home,
         NavigationItem.Changelogs,
         NavigationItem.Video
     )

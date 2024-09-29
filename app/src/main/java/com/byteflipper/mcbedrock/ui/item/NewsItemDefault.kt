@@ -1,5 +1,8 @@
 package com.byteflipper.mcbedrock.ui.item
 
+import android.content.Context
+import android.net.Uri
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,7 +22,6 @@ import coil.compose.rememberAsyncImagePainter
 import com.byteflipper.mcbedrock.Image
 import com.byteflipper.mcbedrock.NewsEntry
 import com.byteflipper.mcbedrock.R
-import com.byteflipper.mcbedrock.screens.openLinkInCustomTab
 import com.byteflipper.mcbedrock.ui.theme.MCBedrockTheme
 
 @Composable
@@ -58,13 +60,75 @@ fun NewsItemDefault(entry: NewsEntry) {
                 Text(
                     text = entry.text,
                     fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = MaterialTheme.colorScheme.secondary
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 ActionRow(entry, context)
             }
+        }
+    }
+}
+
+@Composable
+fun NewsItemImage(entry: NewsEntry) {
+    Row(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
+        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+    ) {
+        if (entry.newsPageImage.url != null) {
+            Image(
+                painter = rememberAsyncImagePainter("https://launchercontent.mojang.com${entry.newsPageImage.url}"),
+                contentDescription = entry.title,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(96.dp)
+                    .clip(RoundedCornerShape(21.dp))
+            )
+        } else if (entry.newsPageImage.drawableResId != null) {
+            Image(
+                painter = painterResource(id = entry.newsPageImage.drawableResId),
+                contentDescription = entry.title,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(96.dp)
+                    .clip(RoundedCornerShape(21.dp))
+            )
+        }
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = entry.title,
+                fontSize = 16.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.secondary
+            )
+
+            //Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = entry.text,
+                fontSize = 14.sp,
+                lineHeight = 18.sp,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
+            //Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = entry.newsType.joinToString(", "),
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.secondary
+            )
         }
     }
 }
@@ -88,7 +152,7 @@ fun NewsImage(entry: NewsEntry) {
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(140.dp) // Высота картинки, чтобы все элементы помещались
+                .height(172.dp)
                 .clip(RoundedCornerShape(16.dp))
         )
     }
@@ -136,6 +200,12 @@ fun PreviewNewsItems() {
     )
 
     Column {
+        NewsItemImage(entry = sampleEntry)
         NewsItemDefault(entry = sampleEntry)
     }
+}
+
+fun openLinkInCustomTab(url: String, context: Context) {
+    val customTabsIntent = CustomTabsIntent.Builder().build()
+    customTabsIntent.launchUrl(context, Uri.parse(url))
 }
