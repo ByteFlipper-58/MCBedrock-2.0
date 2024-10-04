@@ -9,17 +9,17 @@ import kotlinx.coroutines.launch
 
 class MainViewModel: ViewModel() {
 
-    private val _isReady = MutableStateFlow(false)
-    val isReady = _isReady.asStateFlow()
+    var isReady: Boolean = false
+        private set
 
     fun onSplashScreenTimeout() {
-        _isReady.value = true
+        isReady = true
     }
 
     init {
         viewModelScope.launch {
-            delay(3000L)
-            _isReady.value = true
+            delay(100L)
+            isReady = true
         }
     }
 }

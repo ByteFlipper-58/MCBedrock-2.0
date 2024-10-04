@@ -1,4 +1,4 @@
-package com.byteflipper.mcbedrock.screens
+package com.byteflipper.mcbedrock.screens.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,5 +14,6 @@ fun SettingsScreen (modifier: Modifier = Modifier) {
         modifier = Modifier.fillMaxSize()
     ) {
         Text("Настройки")
+
     }
 }

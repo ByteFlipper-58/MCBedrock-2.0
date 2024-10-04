@@ -26,6 +26,7 @@ import androidx.navigation.NavHostController
 import com.byteflipper.mcbedrock.ChangelogEntry
 import com.byteflipper.mcbedrock.ChangelogImage
 import com.byteflipper.mcbedrock.Image
+import com.byteflipper.mcbedrock.NavigationItem
 import com.byteflipper.mcbedrock.NewsEntry
 import com.byteflipper.mcbedrock.R
 import com.byteflipper.mcbedrock.ui.item.NewsItemImage
@@ -37,7 +38,8 @@ fun <T> HorizontalCarusel(
     itemContent: @Composable (T) -> Unit,
     maxItems: Int,
     navController: NavHostController,
-    navigationRoute: String
+    navigationRoute: String,
+    carouselTitle: String
 ) {
     val displayItems = items.take(maxItems)
     val pagerState = rememberPagerState(pageCount = { displayItems.size })
@@ -47,22 +49,31 @@ fun <T> HorizontalCarusel(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable(onClick = {
-                    navController.navigate(navigationRoute)
+                    navController.navigate(navigationRoute) {
+                        launchSingleTop = true
+                        restoreState = true
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
+
+                    }
                 }),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                modifier = Modifier.weight(.85f)
+                modifier = Modifier
+                    .weight(.85f)
                     .padding(16.dp, 0.dp, 0.dp, 0.dp),
-                text = "Horizontal Carousel",
+                text = carouselTitle,
                 fontSize = 20.sp,
                 style = MaterialTheme.typography.titleLarge,
                 textAlign = TextAlign.Start,
             )
 
             IconButton(
-                modifier = Modifier.weight(.1f)
+                modifier = Modifier
+                    .weight(.1f)
                     .padding(0.dp, 0.dp, 16.dp, 0.dp),
                 onClick = {}
             ) {
@@ -111,7 +122,8 @@ fun PreviewHorizontalCarusel() {
             itemContent = { entry -> NewsItemImage(entry) },
             maxItems = 1,
             navController = NavHostController(LocalContext.current),
-            navigationRoute = "news"
+            navigationRoute = "news",
+            carouselTitle = "String"
         )
     }
 }

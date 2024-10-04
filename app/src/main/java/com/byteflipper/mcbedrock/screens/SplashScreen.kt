@@ -39,7 +39,7 @@ import com.byteflipper.mcbedrock.ui.theme.MCBedrockTheme
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(onTimeout: () -> Unit) {
+fun SplashScreen() {
     MCBedrockTheme {
         var animState by remember { mutableIntStateOf(0) }
 
@@ -48,7 +48,6 @@ fun SplashScreen(onTimeout: () -> Unit) {
                 delay(100)
                 animState += 1
                 delay(3000)
-                onTimeout()
             }
         }
 
@@ -201,5 +200,5 @@ fun SplashScreen(onTimeout: () -> Unit) {
 @PreviewLightDark
 @Composable
 fun SplashScreenPreview() {
-    SplashScreen(onTimeout = {})
+    SplashScreen()
 }

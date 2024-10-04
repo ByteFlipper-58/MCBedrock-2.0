@@ -23,7 +23,7 @@ import com.byteflipper.mcbedrock.ui.item.NewsItemDefault
 import kotlinx.coroutines.launch
 
 @Composable
-fun NewsScreen(modifier: Modifier = Modifier, navController: NavHostController) {
+fun NewsScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
     ) {
@@ -47,5 +47,5 @@ fun NewsScreen(modifier: Modifier = Modifier, navController: NavHostController) 
 @Preview(showBackground = true)
 @Composable
 fun NewsScreenPreview() {
-    NewsScreen(modifier = Modifier, navController = NavHostController(LocalContext.current))
+    NewsScreen(modifier = Modifier)
 }
